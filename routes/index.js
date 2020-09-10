@@ -9,11 +9,17 @@ router.get('/', (_, res) => {
 });
 
 router.get('/meme', async (_, res) => {
-  const randomMeme = await axios('https://imgflip.com/ajax_img_flip?current_iid=100923471');
-  const memePage = await axios(`https://imgflip.com${randomMeme.data}`);
-  const $ = cheerio.load(memePage.data);
-  const src = $('#im').attr('src');
-  res.status(200).send(src.substring(2, src.length));
+  try {
+    const randomMeme = await axios('https://imgflip.com/ajax_img_flip?current_iid=100923471');
+    const memePage = await axios(`https://imgflip.com${randomMeme.data}`);
+    const $ = cheerio.load(memePage.data);
+    const src = $('#im').attr('src');
+    const url = `https://${src.substring(2, src.length)}`;
+    res.status(200).send(url);
+  } catch (err) {
+    console.log(err);
+    res.status(200).send('https://sayingimages.com/wp-content/uploads/try-again-fail-meme.png');
+  }
 });
 
 module.exports = router;
