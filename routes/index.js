@@ -5,7 +5,8 @@ const cheerio = require('cheerio');
 const router = express.Router();
 
 
-const { token, channel } = process.env;
+const token = process.env.TOKEN || '';
+const channel = process.env.CHANNEL || 'memes';
 
 const getRandomMemeUrl = async () => {
   try {
@@ -33,7 +34,9 @@ router.get('/meme', async (_, res) => {
       channel,
       text: url,
     },
-  }).catch(console.log);
+  })
+    .then(() => console.log('meme posted in channel'))
+    .catch(console.log);
 
   res.status(200).send(url);
 });
@@ -47,7 +50,10 @@ router.post('/meme', async (_, res) => {
       channel,
       text: url,
     },
-  }).catch(console.log);
+
+  })
+    .then(() => console.log('meme posted in channel'))
+    .catch(console.log);
 
   res.status(200).send(url);
 });
